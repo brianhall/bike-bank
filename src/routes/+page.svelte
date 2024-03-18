@@ -5,7 +5,7 @@
 <h2>Totals for Time Period</h2>
 <ul>
 	<li>{data.rides.total.distanceInMiles}mi</li>
-	<li>{data.rides.total.movingTime.hours} hours, {data.rides.total.movingTime.minutes} minutes</li>
+	<li>{data.rides.total.movingTime.hours}hr {data.rides.total.movingTime.minutes}min {data.rides.total.movingTime.seconds}sec</li>
 </ul>
 
 <ul>

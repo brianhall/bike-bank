@@ -10,13 +10,10 @@ export function load() {
 
 function formatRides(rides) {
 	const filteredRides = rides.filter((ride) => ride.distance > 0);
+
 	filteredRides.total = {
 		distanceInMiles: 0,
-		movingTime: {
-            seconds: 0,
-			minutes: 0,
-			hours: 0,
-		}
+		movingTime: 0
 	};
 
 	for (const ride of filteredRides) {
@@ -27,11 +24,10 @@ function formatRides(rides) {
 		ride.distanceInMiles = metersToMiles(ride.distance);
 
 		filteredRides.total.distanceInMiles += ride.distanceInMiles;
-		filteredRides.total.movingTime = addMovingTimeToTotal(
-			ride.moving_time,
-			filteredRides.total.movingTime
-		);
+		filteredRides.total.movingTime += ride.moving_time;
 	}
+
+    filteredRides.total.movingTime = convertMovingTime(filteredRides.total.movingTime);
 
 	return filteredRides;
 }
@@ -55,20 +51,27 @@ function groupRidesByDay(rides) {
 }
 
 /**
- * Todo: Fix so that we're accumulating seconds into minutes.
+ * Convert total moving time seconds into hours, minutes, and seconds.
  * @param {Number} movingTime
- * @param {Object} totalTime
  */
-function addMovingTimeToTotal(movingTime, totalTime) {
-	const movingTimeMinutes = Math.floor(movingTime / 60);
-	const updatedTime = { ...totalTime };
+function convertMovingTime(movingTime) {
+    const convertedTime = {
+        seconds: 0,
+        minutes: 0,
+        hours: 0
+    }
 
-	updatedTime.minutes += movingTimeMinutes;
+    convertedTime.seconds = movingTime;
 
-	if (updatedTime.minutes > 59) {
-		updatedTime.hours += Math.floor(updatedTime.minutes / 60);
-		updatedTime.minutes = updatedTime.minutes % 60;
+    if (convertedTime.seconds > 59) {
+        convertedTime.minutes += Math.floor(convertedTime.seconds / 60);
+        convertedTime.seconds = convertedTime.seconds % 60;
+    }
+
+	if (convertedTime.minutes > 59) {
+		convertedTime.hours += Math.floor(convertedTime.minutes / 60);
+		convertedTime.minutes = convertedTime.minutes % 60;
 	}
 
-	return updatedTime;
+	return convertedTime;
 }
