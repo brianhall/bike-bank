@@ -1,4 +1,5 @@
 import { rides } from '$lib/rides';
+import { beers } from '$lib/beers';
 import { convertTimestamp, metersToMiles } from '$lib/utils';
 
 export function load() {
@@ -27,7 +28,7 @@ function formatRides(rides) {
 		filteredRides.total.movingTime += ride.moving_time;
 	}
 
-    filteredRides.total.movingTime = convertMovingTime(filteredRides.total.movingTime);
+	filteredRides.total.movingTime = convertMovingTime(filteredRides.total.movingTime);
 
 	return filteredRides;
 }
@@ -55,18 +56,18 @@ function groupRidesByDay(rides) {
  * @param {Number} movingTime
  */
 function convertMovingTime(movingTime) {
-    const convertedTime = {
-        seconds: 0,
-        minutes: 0,
-        hours: 0
-    }
+	const convertedTime = {
+		seconds: 0,
+		minutes: 0,
+		hours: 0
+	};
 
-    convertedTime.seconds = movingTime;
+	convertedTime.seconds = movingTime;
 
-    if (convertedTime.seconds > 59) {
-        convertedTime.minutes += Math.floor(convertedTime.seconds / 60);
-        convertedTime.seconds = convertedTime.seconds % 60;
-    }
+	if (convertedTime.seconds > 59) {
+		convertedTime.minutes += Math.floor(convertedTime.seconds / 60);
+		convertedTime.seconds = convertedTime.seconds % 60;
+	}
 
 	if (convertedTime.minutes > 59) {
 		convertedTime.hours += Math.floor(convertedTime.minutes / 60);
