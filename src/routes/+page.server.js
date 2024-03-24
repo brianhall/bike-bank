@@ -4,9 +4,27 @@ import { convertTimestamp, metersToMiles } from '$lib/utils';
 
 export function load() {
 	const formattedRides = formatRides(rides);
-	const ridesByDay = groupRidesByDay(formattedRides);
+	const formattedBeers = formatBeers(beers);
+	const activities = formattedRides.concat(formattedBeers);
 
-	return { rides: formattedRides, ridesByDay: ridesByDay };
+	const activitiesByDay = groupActivitiesByDay(activities);
+
+	console.log({ rides: formattedRides, activitiesByDay });
+
+	return { rides: formattedRides, activitiesByDay };
+}
+
+function formatBeers(beers) {
+	const formattedBeers = [...beers];
+
+	for (const beer of formattedBeers) {
+		const { date, time } = convertTimestamp(beer.date);
+
+		beer.formattedDate = date;
+		beer.formattedTime = time;
+	}
+
+	return formattedBeers;
 }
 
 function formatRides(rides) {
@@ -20,7 +38,7 @@ function formatRides(rides) {
 	for (const ride of filteredRides) {
 		const { date, time } = convertTimestamp(ride.start_date);
 
-		ride.formattedStartDate = date;
+		ride.formattedDate = date;
 		ride.formattedStartTime = time;
 		ride.distanceInMiles = metersToMiles(ride.distance);
 
@@ -35,20 +53,20 @@ function formatRides(rides) {
 
 /**
  * Group rides by day
- * @param {Array<Object>} rides
+ * @param {Array<Object>} activities
  */
-function groupRidesByDay(rides) {
-	const ridesByDate = {};
+function groupActivitiesByDay(activities) {
+	const activitiesByDay = {};
 
-	for (const ride of rides) {
-		if (ridesByDate[ride.formattedStartDate]) {
-			ridesByDate[ride.formattedStartDate].push(ride);
+	for (const activity of activities) {
+		if (activitiesByDay[activity.formattedDate]) {
+			activitiesByDay[activity.formattedDate].push(activity);
 		} else {
-			ridesByDate[ride.formattedStartDate] = [ride];
+			activitiesByDay[activity.formattedDate] = [activity];
 		}
 	}
 
-	return ridesByDate;
+	return activitiesByDay;
 }
 
 /**

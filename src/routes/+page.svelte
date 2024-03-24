@@ -12,11 +12,11 @@
 </ul>
 
 <ul>
-	{#each Object.keys(data.ridesByDay) as day}
+	{#each Object.keys(data.activitiesByDay) as day}
 		<h3>{day}</h3>
-		{#each data.ridesByDay[day] as { formattedStartTime, name, distanceInMiles }}
+		{#each data.activitiesByDay[day] as { formattedStartTime, name }}
 			<li>
-				At {formattedStartTime} you went on a ride called <b>{name}</b> for {distanceInMiles}mi
+				At {formattedStartTime} you went on a ride called <b>{name}</b>
 			</li>
 		{/each}
 	{/each}
